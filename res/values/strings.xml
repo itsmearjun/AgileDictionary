@@ -19,7 +19,7 @@
 <resources>
 
     <!-- The name of the application. -->
-    <string name="app_name">Searchable Dictionary</string>
+    <string name="app_name">Agile Dictionary</string>
 
     <!-- The label for use as a searchable item -->
     <string name="search_label">Dictionary</string>
