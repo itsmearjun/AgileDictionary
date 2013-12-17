@@ -96,6 +96,16 @@ public class DictionaryDatabase {
          *     SELECT <columns> FROM <table> WHERE rowid = <rowId>
          */
     }
+    
+    
+    
+    public Cursor getAllWords(String[] columns){
+    	
+    	return query(null,null,columns);
+    }
+    
+    
+    
 
     /**
      * Returns a Cursor over all words that match the given query
@@ -140,9 +150,15 @@ public class DictionaryDatabase {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         builder.setTables(FTS_VIRTUAL_TABLE);
         builder.setProjectionMap(mColumnMap);
+        Log.d("AD", "Building and querying");
+        Log.d("AD","Columns;"+columns[1]);
+
+        
 
         Cursor cursor = builder.query(mDatabaseOpenHelper.getReadableDatabase(),
                 columns, selection, selectionArgs, null, null, null);
+        
+        Log.d("AD", "Queried");
 
         if (cursor == null) {
             return null;

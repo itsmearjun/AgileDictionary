@@ -24,6 +24,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 /**
  * Provides access to the dictionary database.
@@ -47,6 +48,7 @@ public class DictionaryProvider extends ContentProvider {
     private static final int GET_WORD = 1;
     private static final int SEARCH_SUGGEST = 2;
     private static final int REFRESH_SHORTCUT = 3;
+    private static final int GET_ALL = 4;
     private static final UriMatcher sURIMatcher = buildUriMatcher();
 
     /**
@@ -57,6 +59,7 @@ public class DictionaryProvider extends ContentProvider {
         // to get definitions...
         matcher.addURI(AUTHORITY, "dictionary", SEARCH_WORDS);
         matcher.addURI(AUTHORITY, "dictionary/#", GET_WORD);
+        matcher.addURI(AUTHORITY, "dictionary/all", GET_ALL);
         // to get suggestions...
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY, SEARCH_SUGGEST);
         matcher.addURI(AUTHORITY, SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCH_SUGGEST);
@@ -107,6 +110,10 @@ public class DictionaryProvider extends ContentProvider {
                 return getWord(uri);
             case REFRESH_SHORTCUT:
                 return refreshShortcut(uri);
+            case GET_ALL:
+            	Log.d("AD", "at get all");
+            	return getAllWords();
+            	
             default:
                 throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
@@ -124,6 +131,17 @@ public class DictionaryProvider extends ContentProvider {
 
       return mDictionary.getWordMatches(query, columns);
     }
+    
+    
+    private Cursor getAllWords() {
+       
+        String[] columns = new String[] {
+            BaseColumns._ID,
+            DictionaryDatabase.KEY_WORD,
+            DictionaryDatabase.KEY_DEFINITION};
+
+        return mDictionary.getAllWords(columns);
+      }
 
     private Cursor search(String query) {
       query = query.toLowerCase();
